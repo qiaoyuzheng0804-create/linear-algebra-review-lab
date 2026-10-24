@@ -93,8 +93,15 @@ def render_visualization(key, prefix):
     elif key == "gram_schmidt":
         step = st.slider("正交化步骤", 1, 2, 1, key=f"{prefix}-gs")
         figure = viz.gram_schmidt([[1, 1], [2, 0]], step)
+    elif key == "hermitian_spectrum":
+        a = st.slider("厄米矩阵对角元 a", -3., 3., 1., .1, key=f"{prefix}-hermitian-a")
+        d = st.slider("厄米矩阵对角元 d", -3., 3., -1., .1, key=f"{prefix}-hermitian-d")
+        b = st.slider("实对称耦合 b", -3., 3., .6, .1, key=f"{prefix}-hermitian-b")
+        figure = viz.hermitian_spectrum([[a, b], [b, d]])
     elif key == "tensor_dims":
-        figure = viz.tensor_dims()
+        m = st.slider("A 系统维数", 1, 6, 2, key=f"{prefix}-tensor-a")
+        n = st.slider("B 系统维数", 1, 6, 3, key=f"{prefix}-tensor-b")
+        figure = viz.tensor_dims(m, n)
     else:
         st.error(f"尚未注册可视化：{key}")
         return
@@ -206,7 +213,7 @@ def render_foundation(data):
 
 def render_formula_sheet():
     st.title("公式手册")
-    st.caption("每条公式与成立条件配对。第4～10章为预备索引，完整推导将在后续章节补入。")
+    st.caption("每条公式与成立条件、对应章节的推导配对，可按章节或条件检索。")
     query = st.text_input("筛选章节或条件关键词")
     for label, formulas in FORMULA_SHEET.items():
         selected = [(formula, condition) for formula, condition in formulas if not query or query.lower() in f"{label} {formula} {condition}".lower()]

@@ -3,7 +3,7 @@ from collections import Counter
 
 from .content import CHAPTERS, CHAPTER_TITLES
 
-# 每项为（LaTeX，成立条件）；第 4～10 章为后续内容提供标准公式索引。
+# 每项为（LaTeX，成立条件及对应推导）；与十章正文使用相同的内积和基序约定。
 FORMULA_SHEET = {
     "地基": [
         (r"e^{i\theta}=\cos\theta+i\sin\theta", "实数角 θ；由绝对收敛幂级数分组得到，见地基 F2"),
@@ -34,6 +34,7 @@ FORMULA_SHEET = {
         (r"\det(AB)=\det A\det B", "A、B 为同阶方阵；初等矩阵分解证明，式 (4.4)"),
         (r"A\text{可逆}\iff\det A\ne0", "方阵；伴随恒等式与乘法公式，推导 4.4"),
         (r"x_j=\frac{\det A_j(b)}{\det A}", "Ax=b，det A 非零；A_j(b) 将第 j 列替换为 b，式 (4.5)"),
+        (r"A\operatorname{adj}A=\operatorname{adj}A\,A=(\det A)I", "任意有限方阵，包括奇异矩阵；第4章余子式展开推导"),
         (r"\mathrm{Vol}(A\Omega)=|\det A|\,\mathrm{Vol}(\Omega)", "实方阵作用于可测区域，使用普通体积；第4章几何直觉"),
     ],
     "第5章": [
@@ -41,6 +42,7 @@ FORMULA_SHEET = {
         (r"\det(A-\lambda I)=0", "λ 为特征值的充要条件，A 为方阵；式 (5.2)"),
         (r"1\le\dim\ker(A-\lambda I)\le a_\lambda", "λ 为所选数域内的特征值，a_λ 为代数重数；推导 5.3"),
         (r"p_A(A)=0,\quad p_A(z)=\det(zI-A)", "任意有限方阵；Cayley–Hamilton，式 (5.3)"),
+        (r"E_{\lambda_1}+\cdots+E_{\lambda_s}=E_{\lambda_1}\oplus\cdots\oplus E_{\lambda_s}", "互异特征值的本征空间；第5章直和证明，不要求矩阵可逆"),
     ],
     "第6章": [
         (r"\langle u,v\rangle=u^\dagger v", "复欧氏空间，第一变量共轭线性；定义 6.1"),
@@ -65,17 +67,30 @@ FORMULA_SHEET = {
         (r"A^\dagger A=AA^\dagger\iff A=U\Lambda U^\dagger", "复方阵；正规矩阵的酉对角化判据"),
         (r"U^\dagger U=I\Longrightarrow\|U\psi\|=\|\psi\|", "有限维酉方阵，标准复内积"),
         (r"H=\sum_\lambda\lambda P_\lambda,\quad P_\lambda P_\mu=\delta_{\lambda\mu}P_\lambda", "有限维厄米矩阵，P_λ 为整个本征空间的正交投影"),
+        (r"Hv=\lambda v\Longrightarrow\lambda\in\mathbb R,\quad Hx=\lambda x,\ Hy=\mu y,\ \lambda\ne\mu\Longrightarrow x^\dagger y=0", "H 厄米，本征向量非零；推导 8.1、8.2；实谱不意味着正谱"),
+        (r"U^\dagger U=I\iff\langle Ux,Uy\rangle=\langle x,y\rangle\ (\forall x,y)\iff\|Ux\|=\|x\|\ (\forall x)", "U 为复线性方阵；极化恒等式闭合等价链，式 (8.4)"),
+        (r"\langle x,y\rangle=\frac14(\|x+y\|^2-\|x-y\|^2-i\|x+iy\|^2+i\|x-iy\|^2)", "第一变量共轭线性的复内积；式 (8.3)，虚部符号与内积约定相关"),
+        (r"p(\lambda)=\|P_\lambda\psi\|^2=\langle\psi|P_\lambda|\psi\rangle,\quad\sum_\lambda P_\lambda=I", "归一化纯态、厄米可观测量；简并时投影须覆盖整个本征空间；式 (8.5)"),
     ],
     "第9章": [
         (r"A=U\Sigma V^\dagger", "任意有限实或复 m×n 矩阵；U、V 酉，奇异值非负"),
         (r"A^+=V\Sigma^+U^\dagger", "任意有限矩阵；Σ⁺ 将非零奇异值取倒数，零保留"),
         (r"\|A-A_k\|_2=\sigma_{k+1},\quad \|A-A_k\|_F^2=\sum_{j>k}\sigma_j^2", "奇异值降序，A_k 为截断 SVD，0≤k<min(m,n)；最优秩至多 k 近似"),
+        (r"A^\dagger Av_i=\sigma_i^2v_i,\quad u_i=Av_i/\sigma_i", "后式只用于正奇异值；零值处改用正交补扩张；推导 9.1"),
+        (r"\sigma_j(A)=\min_{\dim S=n-j+1}\max_{x\in S,\|x\|=1}\|Ax\|", "A 有 n 列，1≤j≤n，超过 min(m,n) 的奇异值补零；式 (9.2)"),
+        (r"A^\dagger A x=A^\dagger b\iff b-Ax\perp\operatorname{im}A", "任意有限实或复 A，等价于 x 是最小二乘解；式 (9.4)"),
+        (r"x=A^+b+z,\quad z\in\ker A", "所有最小二乘解；A⁺b 为唯一最小范数者；式 (9.5)"),
+        (r"A^+b=(A^\dagger A)^{-1}A^\dagger b", "仅当 A 满列秩；亏秩时该求逆步骤失效，式 (9.6)"),
     ],
     "第10章": [
         (r"\dim(V\otimes W)=\dim V\,\dim W", "有限维同数域向量空间"),
         (r"(A\otimes B)(C\otimes D)=AC\otimes BD", "AC 与 BD 的维数分别相容"),
         (r"(A\otimes B)^\dagger=A^\dagger\otimes B^\dagger", "有限实或复矩阵"),
         (r"\operatorname{Tr}_B\rho=\sum_j(I\otimes\langle j|)\rho(I\otimes|j\rangle)", "有限维复合系统，|j⟩ 是 B 的任一正交归一基"),
+        (r"(\rho_A)_{ik}=\sum_j\rho_{(i,j),(k,j)}", "联合基序为 i·dimB+j，只消去 B 指标；式 (10.5)"),
+        (r"|\psi\rangle=\sum_{\alpha=1}^r s_\alpha|u_\alpha\rangle\otimes|w_\alpha\rangle,\quad s_\alpha>0,\quad\sum_\alpha s_\alpha^2=1", "Schmidt 分解：归一化双系统纯态，两端基各自正交归一；由振幅矩阵 SVD 构造，式 (10.6)"),
+        (r"C=U\Sigma V^\dagger,\quad w_\alpha=\bar v_\alpha,\quad\rho_A=CC^\dagger,\quad\rho_B=C^T\bar C", "Cij 是 |i⟩A|j⟩B 的振幅；复系数时 B 端共轭不能省略，式 (10.7)"),
+        (r"\operatorname{tr}(\rho_A^2)=\sum_\alpha s_\alpha^4=1\iff r=1\iff\psi\text{为直积态}", "联合态已知为纯态；联合混合态不能由约化纯度单独判纠缠，推导 10.5"),
     ],
 }
 
@@ -90,7 +105,7 @@ KNOWLEDGE_MAP = {
     "ch7": ["foundation", "ch4", "ch5", "ch6"],
     "ch8": ["foundation", "ch5", "ch6"],
     "ch9": ["foundation", "ch5", "ch6", "ch8"],
-    "ch10": ["foundation", "ch2", "ch8"],
+    "ch10": ["foundation", "ch2", "ch8", "ch9"],
 }
 
 
@@ -110,10 +125,10 @@ DIAGNOSTIC = [
     {"chapter": "ch4", "q_md": "二维变换的普通面积缩放比为？", "options": [r"$\det A$", r"$\operatorname{tr}A$", r"$|\det A|$", r"$\det A+1$"], "answer": 2, "explain_md": "普通面积非负，因此面积比是行列式的绝对值，符号用于定向。"},
     {"chapter": "ch5", "q_md": r"λ 是 n 阶矩阵 A 的特征值的充要条件是？", "options": [r"$\det A\ne0$", r"$\lambda\ne0$", r"$\operatorname{tr}A=\lambda$", r"$\det(A-\lambda I)=0$"], "answer": 3, "explain_md": "行列式为零等价于 A−λI 有非零核向量，也就是存在非零本征态。"},
     {"chapter": "ch6", "q_md": "Gram–Schmidt 中某步残差为零说明？", "options": ["当前向量在前面向量的张成内", "已得新单位向量", "矩阵必为方阵", "内积失效"], "answer": 0, "explain_md": "扣除已有方向投影后没有剩余分量，因此归一化分母为零，应识别相关性。"},
-    {"chapter": "ch9", "q_md": "SVD 对哪些有限矩阵存在？", "options": ["仅可逆方阵", "任意实或复矩阵", "仅厄米矩阵", "仅对角矩阵"], "answer": 1, "explain_md": "SVD 不要求方阵、满秩或特征向量张满；左右可使用不同的正交或酉基。"},
+    {"chapter": "ch9", "q_md": "SVD 对哪些有限矩阵存在？", "options": ["仅可逆方阵", "任意实或复矩阵", "仅厄米矩阵", "仅对角矩阵"], "answer": 1, "explain_md": "推导 9.1 从始终厄米半正定的 A†A 构造；零奇异值处以正交补扩张，左右可使用不同基，所以不要求方阵或满秩。"},
     {"chapter": "ch8", "q_md": "厄米矩阵的特征值必为？", "options": ["正数", "整数", "实数", "纯虚数"], "answer": 2, "explain_md": r"若 $Hv=\lambda v$，则 $\lambda=v^\dagger Hv/(v^\dagger v)$，分子因 H 厄米等于自身共轭，故 λ 实。"},
     {"chapter": "ch7", "q_md": r"常系数系统 $\dot x=Ax$ 的传播矩阵为？", "options": [r"$tA$", r"$A^{-1}$", r"$A+tI$", r"$e^{tA}$"], "answer": 3, "explain_md": r"指数级数逐项求导给 $d e^{tA}/dt=Ae^{tA}$，且在 t=0 等于 I。"},
-    {"chapter": "ch10", "q_md": "二维空间与三维空间的张量积维数为？", "options": ["5", "6", "3", "2"], "answer": 1, "explain_md": "两套基两两配对得到 2×3=6 个张量积基向量。"},
+    {"chapter": "ch10", "q_md": "二维空间与三维空间的张量积维数为？", "options": ["5", "6", "3", "2"], "answer": 1, "explain_md": "推导 10.1 构造 2×3 个独立坐标槽位，直积基无关且张成，所以维数为 6；不是直和的 2+3。"},
 ]
 for _i, _q in enumerate(DIAGNOSTIC, 1):
     _q["id"] = f"diag-{_i}"
@@ -185,5 +200,50 @@ _CARD_DATA = [
     ("ch3", r"部分主元选择什么？", r"当前列尚未使用的行中绝对值最大的元素，减少除以小数造成的误差。"),
     ("ch3", r"本征方程何时存在非零态？", r"$\operatorname{rank}(H-EI)<n$，使核维数正；零解不代表物理态。"),
     ("ch3", r"非齐次解集为什么通常不是子空间？", r"$b\ne0$ 时零向量不满足 Ax=b；有解时它是核的平移，属于仿射集。"),
+    ("ch4", r"行列式为何换两行变号？", r"置换求和中交换两个位置使逆序数奇偶翻转，乘积条目重新配对，每项恰变号。"),
+    ("ch4", r"把一行加另一行的倍数，行列式为何不变？", r"按行多线性展开为原行列式加两行相同的项；后者由交错性为零。"),
+    ("ch4", r"det(AB) 的乘法公式何时成立？", r"A、B 为同阶方阵；用初等矩阵分解和各行操作对 det 的影响，见推导 4.3。"),
+    ("ch4", r"奇异矩阵的伴随恒等式还成立吗？", r"成立：$A\operatorname{adj}A=(\det A)I$ 源于余子式展开；只有进一步除以 det A 求逆时要求非零。"),
+    ("ch4", r"克拉默法则的分母为何不能为零？", r"推导要由 $x_j\det A=\det A_j(b)$ 除以 det A；为零时不能由此确定唯一系数。"),
+    ("ch4", r"二维普通面积因子与定向因子有何区别？", r"普通面积比为 $|\det A|$，有向面积因子为 det A；负号记录翻转。"),
+    ("ch5", r"特征多项式的根为何给非零本征向量？", r"根使 det(λI−A)=0，故 λI−A 不可逆、核维数为正，可取非零核向量。"),
+    ("ch5", r"代数重数与几何重数分别数什么？", r"前者数特征多项式根的重数，后者数对应核空间维数；$1\le g_\lambda\le a_\lambda$。"),
+    ("ch5", r"不同本征值的本征空间为什么是直和？", r"若各空间向量之和为零，逐次施加 $(A-\lambda I)$ 消去某项，以互异差值非零推出每项为零。"),
+    ("ch5", r"Cayley–Hamilton 说什么？", r"任意有限方阵满足 $p_A(A)=0$；推导 5.4 先在可对角化情形证明，再用复三角化与对角微扰构造互异谱逼近，最后以矩阵条目的多项式连续性取极限。"),
+    ("ch5", r"实旋转矩阵为什么可能没有实特征向量？", r"非零非平角旋转不保留实直线；特征多项式可能只有非实根，改到复数域才可取本征向量。"),
+    ("ch5", r"二阶 Jordan 块为何只有一个本征方向？", r"$J=\begin{pmatrix}\lambda&1\\0&\lambda\end{pmatrix}$ 的核方程给 x₂=0，所以本征空间一维而代数重数二。"),
+    ("ch6", r"复内积的第一变量有什么约定？", r"第一变量共轭线性：$\langle cx,y\rangle=\bar c\langle x,y\rangle$；第二变量线性。"),
+    ("ch6", r"Cauchy–Schwarz 的等号条件是什么？", r"两向量线性相关（含零向量）；正定性把最小二次式为零转成一个向量为零。"),
+    ("ch6", r"Gram–Schmidt 残差为何与已有方向垂直？", r"$u=v-\sum q_j\langle q_j,v\rangle$，取与 qᵢ 的内积后利用 δᵢⱼ 恰抵消原分量。"),
+    ("ch6", r"QR 的 R 元素从何而来？", r"原列在正交基下的系数 $r_{ij}=q_i^\dagger a_j$；逐列正交化给上三角，满列秩确保对角残差范数为正。"),
+    ("ch6", r"正交投影为什么给最佳逼近？", r"$x-y=(x-p)+(p-y)$ 两项正交，误差平方分成固定项与非负项，只有 y=p 时第二项为零。"),
+    ("ch6", r"薄 QR 的 Q 是方阵吗？", r"不一定。m×n 的满列秩矩阵给 m×n 的 Q，仅 $Q^\dagger Q=I_n$；m>n 时 $QQ^\dagger$ 为投影而不是 Iₘ。"),
+    ("ch7", r"对角化的真正充要条件是什么？", r"所选数域上本征向量张满全空间；排成 P 可逆，逐列 AP=PΛ 才能乘 P⁻¹。"),
+    ("ch7", r"重特征值是否必定不能对角化？", r"否。λI 的本征空间是全空间；问题在于每个几何重数是否达到代数重数。"),
+    ("ch7", r"矩阵指数为何总存在？", r"次乘性范数给 $\|t^kA^k/k!\|\le |t|^k\|A\|^k/k!$，总和被标量指数控制，故绝对收敛。"),
+    ("ch7", r"什么时候可以拆指数 e^(A+B)？", r"AB=BA 是充分条件，使二项式合项合法；一般非交换时二阶交叉项已经不相同。"),
+    ("ch7", r"N²=0 的 Jordan 修正如何进入指数？", r"$e^{tN}=I+tN$；若 J=λI+N，二者对易，$e^{tJ}=e^{\lambda t}(I+tN)$。"),
+    ("ch7", r"离散与连续稳定判据分别是什么？", r"模式 λ 的离散幅度为 |λ|ᵏ，连续幅度为 $e^{t\operatorname{Re}\lambda}$；衰减分别要求 |λ|<1 与 Re λ<0。"),
+    ("ch8", r"厄米矩阵实谱证明的除法发生在哪？", r"先由共轭得 $(\lambda-\bar\lambda)\|x\|^2=0$，再由本征向量非零及正定性除以正范数平方。"),
+    ("ch8", r"谱定理归纳为何能限制到正交补？", r"$q^\dagger Hw=(Hq)^\dagger w=\bar\lambda q^\dagger w=0$ 保证不变；限制矩阵元仍满足共轭对称。"),
+    ("ch8", r"至少一个复特征向量的存在来自哪里？", r"代数学基本定理给首一特征多项式一个复根，行列式为零再给非零核；不是先假设谱定理。"),
+    ("ch8", r"保范数推出保内积用什么？", r"极化恒等式及复线性，把 x±y、x±iy 的范数差恢复为内积实部与虚部。"),
+    ("ch8", r"Schur 三角阵为何在正规时对角？", r"首行平方和与首列平方和相等，首列只有对角元，迫使首行其余元为零；对剩余正规块归纳。"),
+    ("ch8", r"简并读数的测量概率怎么求？", r"$p(\lambda)=\|P_\lambda\psi\|^2$，Pλ 必须投影整个本征子空间，不能只取其中一个方向。"),
+    ("ch8", r"酉演化保持哪些量？", r"保持任意两态内积与态范数；在固定测量基中的各结果概率仍可因相对相位变化而改变。"),
+    ("ch8", r"非正规矩阵的谱证明会在哪断掉？", r"正交补未必不变；Schur 路线仍成立，但缺少行列平方和相等的正规性条件，超对角项不能消去。"),
+    ("ch9", r"SVD 为何对矩形矩阵存在？", r"A†A 始终为输入空间上的厄米半正定方阵；输出方向另由 Avᵢ/σᵢ 构造，两端不要求同一基。"),
+    ("ch9", r"零奇异值对应的 u=Av/σ 怎么办？", r"不能除以零；先由 ‖Av‖²=0 得 Av=0，非零像方向构造完后在输出正交补扩张。"),
+    ("ch9", r"截断 SVD 的 F 误差是什么？", r"$\sqrt{\sum_{i>k}\sigma_i^2}$；酉不变性把误差化为丢弃的对角项，极小极大刻画证明其全局最优。"),
+    ("ch9", r"正规方程的几何内容是什么？", r"$A^\dagger(b-Ax)=0$，残差与整个列空间正交；沿任何列方向移动都不能减少误差。"),
+    ("ch9", r"伪逆为何选出最小范数解？", r"它将所有核方向系数设为零；其他最小二乘解为 x₊+z，二者正交，范数平方额外增加 ‖z‖²。"),
+    ("ch9", r"Gram 路径求 SVD 的数值代价是什么？", r"A†A 将非零奇异值的最大最小比平方，可能放大病态性；本章实现限小规模适中谱，检验构造原理。"),
+    ("ch10", r"张量积的基为什么有 mn 个？", r"每对局域基占一个独立系数槽位；这些符号张成所有系数表且逐槽比较证明无关。"),
+    ("ch10", r"张量积算符的复合规则是什么？", r"$(A\otimes B)(C\otimes D)=AC\otimes BD$；先在 eᵢ⊗fⱼ 上两端分别复合，再按线性性延拓。"),
+    ("ch10", r"Bell 态不可分解的系数矛盾是什么？", r"直积要求 ac=bd=1/√2 且 ad=bc=0；前两非零使 abcd=1/2，后两又使 abcd=0。"),
+    ("ch10", r"部分迹怎样保留 A 的条目？", r"$(\rho_A)_{ik}=\sum_j\rho_{(i,j),(k,j)}$；保留 i、k，对同一 B 指标 j 求和。"),
+    ("ch10", r"Schmidt 分解与 SVD 的复共轭如何对应？", r"C=UΣV† 时，A 端基是 U 列，B 端基是 V 列的共轭，非负 Schmidt 系数是 C 的奇异值。"),
+    ("ch10", r"什么时候可以用约化纯度判纠缠？", r"联合态已知为纯态时，约化纯度为 1 等价于 Schmidt 秩一；联合混合态的局域混合性本身不能判纠缠。"),
+    ("ch10", r"Bell 态与经典相关混合态能否有相同局域矩阵？", r"可以，均为 I/2；但 Bell 态的 σₓ⊗σₓ 期望为 1，等权 00/11 混合态为 0，联合相干信息不同。"),
 ]
 FLASHCARDS = [{"id": f"card-{i}", "chapter": c, "front": f, "back": b} for i, (c, f, b) in enumerate(_CARD_DATA, 1)]

@@ -120,10 +120,14 @@ def svd_ellipse(A):
     t = np.linspace(0, 2*np.pi, 240)
     circle = np.array([np.cos(t), np.sin(t)])
     stages = [Vt @ circle, np.diag(singular) @ Vt @ circle, A @ circle]
+    vector = np.array([np.cos(.6), np.sin(.6)])
+    vectors = [Vt @ vector, np.diag(singular) @ Vt @ vector, A @ vector]
     fig, axes = plt.subplots(1, 3, figsize=(12, 4))
-    for ax, points, title in zip(axes, stages, ("① $V^T$ 正交变换", "② $Σ$ 沿坐标轴伸缩", "③ $U$ 正交变换")):
+    for ax, points, current, title in zip(axes, stages, vectors, ("① $V^T$ 正交变换", "② $Σ$ 沿坐标轴伸缩", "③ $U$ 正交变换")):
         ax.plot(*circle, "--", color="gray", label="原单位圆")
         ax.plot(*points, color="steelblue", label="当前像")
+        _arrow(ax, vector, "gray", "$x$")
+        _arrow(ax, current, "darkorange", "当前向量")
         _axes(ax, np.c_[circle, *stages])
         ax.set_title(title)
         ax.legend(fontsize=8)
@@ -151,14 +155,37 @@ def matrix_power(A, k):
     return fig
 
 
-def tensor_dims():
+def hermitian_spectrum(H):
+    H = _matrix(H)
+    if not np.allclose(H, H.T, rtol=0., atol=1e-12):
+        raise ValueError("此图展示实对称的二维厄米截面")
+    values, Q = np.linalg.eigh(H)
+    t = np.linspace(0, 2*np.pi, 240)
+    circle = np.array([np.cos(t), np.sin(t)])
+    fig, axes = plt.subplots(1, 2, figsize=(10, 4))
+    for ax, matrix, title in zip(axes, (np.eye(2), H), ("正交归一本征基", "沿本征轴作实数伸缩")):
+        ax.plot(*(matrix @ circle), color="steelblue")
+        for j in range(2):
+            ax.plot(*np.outer(Q[:, j], [-2, 2]), "--", color=f"C{j}", alpha=.4)
+            _arrow(ax, matrix @ Q[:, j], f"C{j}", f"λ={values[j]:.2g}")
+        _axes(ax, np.c_[circle, H@circle])
+        ax.set_title(title)
+    fig.suptitle("看什么：本征轴相互垂直，负本征值反向，零本征值压塌方向。")
+    fig.tight_layout()
+    return fig
+
+
+def tensor_dims(m=2, n=3):
+    m, n = int(m), int(n)
+    if not 1 <= m <= 6 or not 1 <= n <= 6:
+        raise ValueError("图示维数须在 1～6 之间")
     fig, ax = plt.subplots(figsize=(7, 4))
-    for i in range(2):
-        for j in range(3):
-            ax.add_patch(Rectangle((j, 1-i), 1, 1, fill=False, edgecolor="steelblue", lw=2))
-            ax.text(j+.5, 1-i+.5, f"$e_{i+1} \\otimes f_{j+1}$", ha="center", va="center")
-    ax.set(xlim=(-.2, 3.2), ylim=(-.2, 2.2), aspect="equal")
+    for i in range(m):
+        for j in range(n):
+            ax.add_patch(Rectangle((j, m-1-i), 1, 1, fill=False, edgecolor="steelblue", lw=2))
+            ax.text(j+.5, m-1-i+.5, f"$e_{i+1} \\otimes f_{j+1}$", ha="center", va="center", fontsize=9)
+    ax.set(xlim=(-.2, n+.2), ylim=(-.2, m+.2), aspect="equal")
     ax.axis("off")
-    ax.set_title("看什么：2 个基向量与 3 个基向量两两配对，张量积维数为 6。")
+    ax.set_title(f"看什么：{m} 个基向量与 {n} 个基向量两两配对，张量积维数为 {m*n}。")
     fig.tight_layout()
     return fig

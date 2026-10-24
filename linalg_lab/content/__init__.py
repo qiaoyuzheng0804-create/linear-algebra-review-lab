@@ -6,8 +6,11 @@ from .ch04 import CHAPTER as CH04
 from .ch05 import CHAPTER as CH05
 from .ch06 import CHAPTER as CH06
 from .ch07 import CHAPTER as CH07
+from .ch08 import CHAPTER as CH08
+from .ch09 import CHAPTER as CH09
+from .ch10 import CHAPTER as CH10
 
-CHAPTERS = {chapter["num"]: chapter for chapter in (CH01, CH02, CH03, CH04, CH05, CH06, CH07)}
+CHAPTERS = {chapter["num"]: chapter for chapter in (CH01, CH02, CH03, CH04, CH05, CH06, CH07, CH08, CH09, CH10)}
 CHAPTER_TITLES = {
     1: "向量空间、线性组合与线性相关",
     2: "矩阵与线性变换",

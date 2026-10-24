@@ -26,7 +26,7 @@ def execute_reference(exercise):
 
 
 def test_registry_integrity():
-    assert list(CHAPTERS) == list(range(1, 8))
+    assert list(CHAPTERS) == list(range(1, 11))
     assert list(CHAPTER_TITLES) == list(range(1, 11))
     ids = []
     for number, chapter in CHAPTERS.items():
@@ -253,7 +253,7 @@ def test_diagnostic_recommendations_follow_error_distribution():
     assert "从第3章" in recommend({"diag-6": False, "diag-7": False})
     assert "从第1章" in recommend({"diag-4": False, "diag-6": False, "diag-7": False})
     assert "建设中" not in recommend({"diag-10": False})
-    assert "建设中" in recommend({"diag-12": False})
+    assert "建设中" not in recommend({"diag-12": False})
     assert "1/14" in recommend({"diag-1": True})
 
 
