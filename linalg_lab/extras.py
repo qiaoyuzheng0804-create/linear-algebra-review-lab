@@ -1,7 +1,7 @@
 """公式、诊断、知识依赖与闪卡数据；无 Streamlit 依赖。"""
 from collections import Counter
 
-from .content import CHAPTER_TITLES
+from .content import CHAPTERS, CHAPTER_TITLES
 
 # 每项为（LaTeX，成立条件）；第 4～10 章为后续内容提供标准公式索引。
 FORMULA_SHEET = {
@@ -29,27 +29,36 @@ FORMULA_SHEET = {
         (r"\{x:Ax=b\}=x_p+\ker A", "已存在特解 x_p；非齐次时是仿射集"),
     ],
     "第4章": [
-        (r"\det A=\sum_{\sigma\in S_n}\operatorname{sgn}(\sigma)\prod_{i=1}^n a_{i,\sigma(i)}", "A 为 n 阶方阵；Leibniz 定义"),
-        (r"\det(AB)=\det A\det B", "A、B 为同阶方阵"),
-        (r"A\text{可逆}\iff\det A\ne0", "方阵；一般矩形矩阵无此行列式判据"),
-        (r"\mathrm{Vol}(A\Omega)=|\det A|\,\mathrm{Vol}(\Omega)", "实方阵作用于可测区域，使用普通体积"),
+        (r"\det A=\sum_{\sigma\in S_n}\operatorname{sgn}(\sigma)\prod_{i=1}^n a_{i,\sigma(i)}", "A 为 n 阶方阵；Leibniz 定义，式 (4.1)"),
+        (r"\det A=\sum_j a_{ij}C_{ij}", "固定第 i 行，C 为代数余子式；式 (4.2)"),
+        (r"\det(AB)=\det A\det B", "A、B 为同阶方阵；初等矩阵分解证明，式 (4.4)"),
+        (r"A\text{可逆}\iff\det A\ne0", "方阵；伴随恒等式与乘法公式，推导 4.4"),
+        (r"x_j=\frac{\det A_j(b)}{\det A}", "Ax=b，det A 非零；A_j(b) 将第 j 列替换为 b，式 (4.5)"),
+        (r"\mathrm{Vol}(A\Omega)=|\det A|\,\mathrm{Vol}(\Omega)", "实方阵作用于可测区域，使用普通体积；第4章几何直觉"),
     ],
     "第5章": [
-        (r"Av=\lambda v\ (v\ne0)\iff (A-\lambda I)v=0", "有限维方阵；λ 在所选数域中"),
-        (r"\det(A-\lambda I)=0", "λ 为特征值的充要条件，A 为方阵"),
-        (r"A=P\Lambda P^{-1}\iff A\text{有一组特征向量基}", "在所选数域上；重根不自动保证可对角化"),
-        (r"A^k=P\Lambda^kP^{-1}", "A 可对角化；k 为非负整数，负整数还要求 A 可逆"),
+        (r"Av=\lambda v\ (v\ne0)\iff (A-\lambda I)v=0", "有限维方阵；λ 在所选数域中，v 非零；推导 5.1"),
+        (r"\det(A-\lambda I)=0", "λ 为特征值的充要条件，A 为方阵；式 (5.2)"),
+        (r"1\le\dim\ker(A-\lambda I)\le a_\lambda", "λ 为所选数域内的特征值，a_λ 为代数重数；推导 5.3"),
+        (r"p_A(A)=0,\quad p_A(z)=\det(zI-A)", "任意有限方阵；Cayley–Hamilton，式 (5.3)"),
     ],
     "第6章": [
-        (r"\langle u,v\rangle=u^\dagger v", "复欧氏空间，第一变量共轭线性"),
-        (r"u_k=v_k-\sum_{j<k}\langle q_j,v_k\rangle q_j,\quad q_k=u_k/\|u_k\|", "q_j 正交归一，输入组无关确保 u_k 非零"),
-        (r"A^\dagger A\hat x=A^\dagger b", "最小二乘的正规方程；有限维实或复矩阵"),
-        (r"\hat x=(A^\dagger A)^{-1}A^\dagger b", "A 满列秩，最小二乘解唯一；数值实现宜用 QR 或 SVD"),
+        (r"\langle u,v\rangle=u^\dagger v", "复欧氏空间，第一变量共轭线性；定义 6.1"),
+        (r"|\langle x,y\rangle|^2\le\|x\|^2\|y\|^2", "正定内积，等号当且仅当两向量线性相关；式 (6.1)"),
+        (r"u_k=v_k-\sum_{j<k}\langle q_j,v_k\rangle q_j,\quad q_k=u_k/\|u_k\|", "q_j 正交归一，输入组无关确保 u_k 非零；式 (6.2)"),
+        (r"A=QR,\quad Q^\dagger Q=I", "A 满列秩的薄 QR，R 上三角且对角线正实；推导 6.3"),
+        (r"p=QQ^\dagger x,\quad \|x-y\|^2=\|x-p\|^2+\|p-y\|^2", "Q 的列为 W 的正交归一基，y∈W；式 (6.3)～(6.4)"),
+        (r"A^\dagger A\hat c=A^\dagger b", "有限维实或复矩阵，最小二乘正规方程；推导 6.4"),
+        (r"\hat c=(A^\dagger A)^{-1}A^\dagger b", "A 满列秩，最小二乘系数唯一；推导 6.4 的正定性论证"),
     ],
     "第7章": [
-        (r"A=U\Sigma V^\dagger", "任意有限实或复 m×n 矩阵；U、V 酉，奇异值非负"),
-        (r"A^+=V\Sigma^+U^\dagger", "任意有限矩阵；Σ⁺ 将非零奇异值取倒数，零保留"),
-        (r"\|A-A_k\|_2=\sigma_{k+1},\quad \|A-A_k\|_F^2=\sum_{j>k}\sigma_j^2", "奇异值降序，A_k 为截断 SVD，0≤k<min(m,n)；最优秩至多 k 近似"),
+        (r"A=P\Lambda P^{-1}\iff A\text{有一组特征向量基}", "在所选数域上；重根不自动保证可对角化，式 (7.2)"),
+        (r"\det B=\det A,\quad\operatorname{tr}B=\operatorname{tr}A,\quad p_B=p_A", "B=P⁻¹AP，P 可逆；推导 7.2"),
+        (r"A^k=P\Lambda^kP^{-1}", "A 可对角化；k 为非负整数，负整数还要求 A 可逆，式 (7.6)"),
+        (r"e^{tA}=\sum_{k=0}^{\infty}\frac{t^kA^k}{k!}", "任意有限方阵，有限 t；绝对收敛，式 (7.1)"),
+        (r"e^{t(A+B)}=e^{tA}e^{tB}", "充分条件 AB=BA；不对易时二项式合项步骤失效，式 (7.5)"),
+        (r"\dot x=Ax,\quad x(t)=e^{tA}x(0)", "常系数有限维系统，初值设在 t=0；式 (7.7)"),
+        (r"U(t)=e^{-iHt/\hbar},\quad U(t)^\dagger U(t)=I", "有限维、时间无关厄米 H，实 t、非零实 ħ；第7章 QM 连接"),
     ],
     "第8章": [
         (r"H=H^\dagger\Longrightarrow H=U\Lambda U^\dagger,\quad\Lambda\text{为实对角阵}", "有限维厄米矩阵，U 酉；谱定理"),
@@ -58,10 +67,9 @@ FORMULA_SHEET = {
         (r"H=\sum_\lambda\lambda P_\lambda,\quad P_\lambda P_\mu=\delta_{\lambda\mu}P_\lambda", "有限维厄米矩阵，P_λ 为整个本征空间的正交投影"),
     ],
     "第9章": [
-        (r"e^{tA}=\sum_{k=0}^{\infty}\frac{t^kA^k}{k!}", "任意有限方阵，有限 t；级数绝对收敛"),
-        (r"\dot x=Ax,\quad x(t)=e^{tA}x(0)", "常系数有限维系统，初值设在 t=0"),
-        (r"e^{A+B}=e^Ae^B", "充分条件 AB=BA；一般不对易时不能套用"),
-        (r"U(t)=e^{-iHt/\hbar},\quad U(t)^\dagger U(t)=I", "有限维、时间无关厄米 H，实 t、非零实 ħ"),
+        (r"A=U\Sigma V^\dagger", "任意有限实或复 m×n 矩阵；U、V 酉，奇异值非负"),
+        (r"A^+=V\Sigma^+U^\dagger", "任意有限矩阵；Σ⁺ 将非零奇异值取倒数，零保留"),
+        (r"\|A-A_k\|_2=\sigma_{k+1},\quad \|A-A_k\|_F^2=\sum_{j>k}\sigma_j^2", "奇异值降序，A_k 为截断 SVD，0≤k<min(m,n)；最优秩至多 k 近似"),
     ],
     "第10章": [
         (r"\dim(V\otimes W)=\dim V\,\dim W", "有限维同数域向量空间"),
@@ -79,9 +87,9 @@ KNOWLEDGE_MAP = {
     "ch4": ["foundation", "ch2", "ch3"],
     "ch5": ["foundation", "ch3", "ch4"],
     "ch6": ["foundation", "ch1", "ch2", "ch3"],
-    "ch7": ["foundation", "ch5", "ch6"],
+    "ch7": ["foundation", "ch4", "ch5", "ch6"],
     "ch8": ["foundation", "ch5", "ch6"],
-    "ch9": ["foundation", "ch5", "ch8"],
+    "ch9": ["foundation", "ch5", "ch6", "ch8"],
     "ch10": ["foundation", "ch2", "ch8"],
 }
 
@@ -100,11 +108,11 @@ DIAGNOSTIC = [
     {"chapter": "ch3", "q_md": "4 个未知量、秩为 2 的齐次方程组，核维数为？", "options": ["0", "1", "2", "4"], "answer": 2, "explain_md": r"式 (3.3) 给 $4-2=2$。"},
     {"chapter": "ch3", "q_md": "消元出现 0=1 的行意味着？", "options": ["唯一解", "无解", "无穷多解", "可忽略该行"], "answer": 1, "explain_md": "依据推导 3.3，增广列增加主元，秩判据不满足。"},
     {"chapter": "ch4", "q_md": "二维变换的普通面积缩放比为？", "options": [r"$\det A$", r"$\operatorname{tr}A$", r"$|\det A|$", r"$\det A+1$"], "answer": 2, "explain_md": "普通面积非负，因此面积比是行列式的绝对值，符号用于定向。"},
-    {"chapter": "ch5", "q_md": "n 阶矩阵可对角化的充要条件是？", "options": ["有 n 个不同条目", "行列式非零", "至少有一个特征值", "有 n 个线性无关的特征向量"], "answer": 3, "explain_md": "将特征向量排成可逆 P，逐列 AP=PΛ，才能得到相似对角化。"},
+    {"chapter": "ch5", "q_md": r"λ 是 n 阶矩阵 A 的特征值的充要条件是？", "options": [r"$\det A\ne0$", r"$\lambda\ne0$", r"$\operatorname{tr}A=\lambda$", r"$\det(A-\lambda I)=0$"], "answer": 3, "explain_md": "行列式为零等价于 A−λI 有非零核向量，也就是存在非零本征态。"},
     {"chapter": "ch6", "q_md": "Gram–Schmidt 中某步残差为零说明？", "options": ["当前向量在前面向量的张成内", "已得新单位向量", "矩阵必为方阵", "内积失效"], "answer": 0, "explain_md": "扣除已有方向投影后没有剩余分量，因此归一化分母为零，应识别相关性。"},
-    {"chapter": "ch7", "q_md": "SVD 对哪些有限矩阵存在？", "options": ["仅可逆方阵", "任意实或复矩阵", "仅厄米矩阵", "仅对角矩阵"], "answer": 1, "explain_md": "SVD 不要求方阵、满秩或特征向量张满；左右可使用不同的正交或酉基。"},
+    {"chapter": "ch9", "q_md": "SVD 对哪些有限矩阵存在？", "options": ["仅可逆方阵", "任意实或复矩阵", "仅厄米矩阵", "仅对角矩阵"], "answer": 1, "explain_md": "SVD 不要求方阵、满秩或特征向量张满；左右可使用不同的正交或酉基。"},
     {"chapter": "ch8", "q_md": "厄米矩阵的特征值必为？", "options": ["正数", "整数", "实数", "纯虚数"], "answer": 2, "explain_md": r"若 $Hv=\lambda v$，则 $\lambda=v^\dagger Hv/(v^\dagger v)$，分子因 H 厄米等于自身共轭，故 λ 实。"},
-    {"chapter": "ch9", "q_md": r"常系数系统 $\dot x=Ax$ 的传播矩阵为？", "options": [r"$tA$", r"$A^{-1}$", r"$A+tI$", r"$e^{tA}$"], "answer": 3, "explain_md": r"指数级数逐项求导给 $d e^{tA}/dt=Ae^{tA}$，且在 t=0 等于 I。"},
+    {"chapter": "ch7", "q_md": r"常系数系统 $\dot x=Ax$ 的传播矩阵为？", "options": [r"$tA$", r"$A^{-1}$", r"$A+tI$", r"$e^{tA}$"], "answer": 3, "explain_md": r"指数级数逐项求导给 $d e^{tA}/dt=Ae^{tA}$，且在 t=0 等于 I。"},
     {"chapter": "ch10", "q_md": "二维空间与三维空间的张量积维数为？", "options": ["5", "6", "3", "2"], "answer": 1, "explain_md": "两套基两两配对得到 2×3=6 个张量积基向量。"},
 ]
 for _i, _q in enumerate(DIAGNOSTIC, 1):
@@ -135,8 +143,8 @@ def recommend(results):
         start = min(candidates, key=lambda c: int(c[2:]))
     distribution = "、".join(f"{chapter_label(c).split('：')[0]} {wrong[c]} 题" for c in KNOWLEDGE_MAP if wrong[c])
     result = prefix + f"错题分布：{distribution}。建议从{chapter_label(start)}开始，先补前置概念。"
-    if start not in {"foundation", "ch1", "ch2", "ch3"}:
-        result += "该章建设中，可先查公式手册并复核第1～3章。"
+    if start not in {"foundation", *(c["id"] for c in CHAPTERS.values())}:
+        result += "该章建设中，可先查公式手册并复核已开放的前置章。"
     return result
 
 

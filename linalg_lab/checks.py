@@ -14,6 +14,12 @@ def _canonical(name):
 def banned_hits(source, banned):
     tree = ast.parse(source)
     blocked = {_canonical(x) for x in banned}
+    # NumPy 可能在其他模块重导出 linalg 的函数。禁用整个 linalg 时，
+    # 同时保留其公开 API 名，与下面的属性/导入符号检查使用同一策略。
+    if "np.linalg" in blocked:
+        blocked.update(f"np.linalg.{name}" for name, value in vars(np.linalg).items()
+                       if not name.startswith("_") and callable(value))
+    reserved = {item.rsplit(".", 1)[-1] for item in blocked if "." in item}
     hits = set()
     scope_types = (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef, ast.Lambda)
 
@@ -62,7 +68,8 @@ def banned_hits(source, banned):
                     for item in node.names:
                         full = f"{module}.{item.name}"
                         bind(item.asname or item.name, {full})
-                        if forbidden(full) or (item.name == "*" and any(x.startswith(module + ".") for x in blocked)):
+                        # 星号导入可隐藏重导出的禁用函数，教学编辑器要求显式导入。
+                        if forbidden(full) or item.name in reserved or item.name == "*":
                             hits.add(full)
                     if not (module == "np" or module.startswith("np.")):
                         hits.add(f"不允许导入：{node.module}")
@@ -80,9 +87,9 @@ def banned_hits(source, banned):
             if isinstance(node, ast.Attribute):
                 # 禁用 API 的末级属性名在本练习中保留；即使库经参数、
                 # global 或解包传递，也不能借改名直接调用该属性。
-                for item in blocked:
-                    if "." in item and node.attr == item.rsplit(".", 1)[-1]:
-                        hits.add(f"{item}（命中属性 {node.attr}）")
+                if node.attr in reserved:
+                    hits.update(f"{item}（命中属性 {node.attr}）" for item in blocked
+                                if item.endswith("." + node.attr))
             if isinstance(node, (ast.Attribute, ast.Name)):
                 hits.update(name for name in resolve(node) if forbidden(name))
             if isinstance(node, ast.Attribute) and node.attr.startswith("__"):

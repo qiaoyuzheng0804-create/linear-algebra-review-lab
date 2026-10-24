@@ -2,17 +2,21 @@
 from .ch01 import CHAPTER as CH01
 from .ch02 import CHAPTER as CH02
 from .ch03 import CHAPTER as CH03
+from .ch04 import CHAPTER as CH04
+from .ch05 import CHAPTER as CH05
+from .ch06 import CHAPTER as CH06
+from .ch07 import CHAPTER as CH07
 
-CHAPTERS = {chapter["num"]: chapter for chapter in (CH01, CH02, CH03)}
+CHAPTERS = {chapter["num"]: chapter for chapter in (CH01, CH02, CH03, CH04, CH05, CH06, CH07)}
 CHAPTER_TITLES = {
     1: "向量空间、线性组合与线性相关",
     2: "矩阵与线性变换",
     3: "线性方程组与高斯消元",
-    4: "行列式与体积",
-    5: "特征值、特征向量与对角化",
-    6: "内积、正交化与最小二乘",
-    7: "奇异值分解与低秩近似",
+    4: "行列式",
+    5: "特征值与特征向量",
+    6: "内积空间、正交化与 Gram–Schmidt",
+    7: "对角化与矩阵指数",
     8: "厄米矩阵、酉矩阵与谱定理",
-    9: "矩阵函数与线性动力学",
+    9: "奇异值分解与低秩近似",
     10: "张量积与复合量子系统",
 }
