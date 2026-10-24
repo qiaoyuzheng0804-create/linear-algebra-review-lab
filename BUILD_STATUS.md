@@ -1,5 +1,13 @@
 # 构建状态（接手者只看这一份即可续做）
 
+**QUOTA_EXHAUSTED 2026-10-25 01:44（北京时间）**——第 4 轮（独立审读）执行约 75 秒后 Codex 返回 `You've hit your usage limit ... try again at 9:23 PM`（按 UTC 读即北京时间 10-25 05:23 恢复，与 5 小时窗口吻合）。撞限额时工作树干净、第 4 轮未产生任何文件改动（它当时还在审读清单第 4 项的作弊探针阶段）。
+
+**续做起点（额度恢复后从这里接，按序）**：
+1. 重跑第 4 轮：任务书全文在 `~/workspace/la-briefs/la_brief4.txt`（持久目录，不在 /tmp）。命令：`~/.local/bin/codex exec -m gpt-6.1-sol -c model_reasoning_effort="high" --skip-git-repo-check -C ~/workspace/repos/linear-algebra-review-lab "$(cat ~/workspace/la-briefs/la_brief4.txt)" </dev/null`。验收方已先行完成其中两项，可直接采信并在 BUILD_STATUS 注明：(a) 防作弊拦截实测——direct/别名导入/getattr/eval/星号导入五类变体对第 3 章练习全部被拦截；(b) 全部 11 道代码练习的 reference 经真实文件探针（~/workspace/la-briefs/probe_checks.py，注意需要 `if __name__ == "__main__"` 守卫否则 spawn 递归）逐一 check_code 通过。第 4 轮还须补：书面题/quiz 答案复核、推导完整性全仓扫描、公式手册一致性、AppTest 全页遍历、review-agent 全仓审查。第 4 轮审读中曾探到 `np.load(..., allow_pickle=True)` 未被 banned 命中（探针输出为空命中清单），续做时评估是否构成绕过面并处理。
+2. 第 5 轮（充实检查）：任务书待写，要点已记在本文件未完成项第 4 条；另加明确目标——第 1~3 章 theory 现为 3,885/3,222/3,806 字符，明显薄于第 8~10 章的 8,838/7,649/8,955，充实轮优先把第 1~3 章补到同等密度（增推导与手算算例，不灌水）。
+3. 最终验收（本文件未完成项第 5 条）与部署尝试（第 6 条；Streamlit Cloud 需用户 GitHub OAuth 登录，大概率卡住，如实记录即可）。
+4. 两轮打磨+最终验收全过后，把本文件状态改为 COMPLETE、删去本 QUOTA 段落或注明恢复时间，commit+push。
+
 状态：**IN_PROGRESS**（未标 COMPLETE 前不许对外宣称建成）
 
 ## 定位与硬标准（不可降标）
