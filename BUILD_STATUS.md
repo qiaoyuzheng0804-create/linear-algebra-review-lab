@@ -1,26 +1,10 @@
 # 构建状态（接手者只看这一份即可续做）
 
-**QUOTA_EXHAUSTED 2026-10-25 05:03（北京时间）**——看护轮重跑第 4 轮，Codex 约 10 秒即返回 usage limit（本次提示 try again at 5:23 AM，与上轮一致），未产生任何文件改动；续做起点不变（见下方 01:44 段落），下一轮 30 分钟后重试。
+**第 4 轮独立审读已完成**。确认 8 项问题并全部修复，另完成 1 项共用检查策略加固；主代理全量与 review-agent 独立分批全量均 **428 passed**。完整逐题/逐章/逐公式审读记录见 [docs/round4-audit.md](docs/round4-audit.md)。
 
-**QUOTA_EXHAUSTED 2026-10-25 04:33（北京时间）**——看护轮重跑第 4 轮，Codex 约 8 秒即返回 usage limit（本次提示 try again at 5:23 AM，与上轮一致），未产生任何文件改动；续做起点不变（见下方 01:44 段落），下一轮 30 分钟后重试。
+**续做起点**：第 5 轮充实检查（特别复核第 1–3 章密度、手算算例与具体 QM 连接），任务书已备好（~/workspace/la-briefs/la_brief5.txt）；然后由验收方执行最终浏览器/手算验收与部署尝试。第 4 轮不替代这些步骤，不标 COMPLETE。
 
-**QUOTA_EXHAUSTED 2026-10-25 04:03（北京时间）**——看护轮重跑第 4 轮，Codex 约 8 秒即返回 usage limit（本次提示 try again at 5:23 AM，与上轮一致），未产生任何文件改动；续做起点不变（见下方 01:44 段落），下一轮 30 分钟后重试。
-
-**QUOTA_EXHAUSTED 2026-10-25 03:32（北京时间）**——看护轮重跑第 4 轮，Codex 约 9 秒即返回 usage limit（本次提示 try again at 5:23 AM，与上轮一致），未产生任何文件改动；续做起点不变（见下方 01:44 段落），下一轮 30 分钟后重试。
-
-**QUOTA_EXHAUSTED 2026-10-25 03:03（北京时间）**——看护轮重跑第 4 轮，Codex 约 9 秒即返回 usage limit（本次提示 try again at 5:23 AM，与上轮一致），未产生任何文件改动；续做起点不变（见下方 01:44 段落），下一轮 30 分钟后重试。
-
-**QUOTA_EXHAUSTED 2026-10-25 02:33（北京时间）**——看护轮重跑第 4 轮，Codex 约 9 秒即返回 usage limit（本次提示 try again at 5:23 AM，与上轮一致），未产生任何文件改动；续做起点不变（见下方 01:44 段落），下一轮 30 分钟后重试。
-
-**QUOTA_EXHAUSTED 2026-10-25 02:03（北京时间）**——看护轮重跑第 4 轮，Codex 约 10 秒即返回 usage limit（本次提示 try again at 5:23 AM，恢复点与上轮一致：北京时间 05:23），未产生任何文件改动；续做起点不变（见下方 01:44 段落），下一轮 30 分钟后重试。
-
-**QUOTA_EXHAUSTED 2026-10-25 01:44（北京时间）**——第 4 轮（独立审读）执行约 75 秒后 Codex 返回 `You've hit your usage limit ... try again at 9:23 PM`（按 UTC 读即北京时间 10-25 05:23 恢复，与 5 小时窗口吻合）。撞限额时工作树干净、第 4 轮未产生任何文件改动（它当时还在审读清单第 4 项的作弊探针阶段）。
-
-**续做起点（额度恢复后从这里接，按序）**：
-1. 重跑第 4 轮：任务书全文在 `~/workspace/la-briefs/la_brief4.txt`（持久目录，不在 /tmp）。命令：`~/.local/bin/codex exec -m gpt-6.1-sol -c model_reasoning_effort="high" --skip-git-repo-check -C ~/workspace/repos/linear-algebra-review-lab "$(cat ~/workspace/la-briefs/la_brief4.txt)" </dev/null`。验收方已先行完成其中两项，可直接采信并在 BUILD_STATUS 注明：(a) 防作弊拦截实测——direct/别名导入/getattr/eval/星号导入五类变体对第 3 章练习全部被拦截；(b) 全部 11 道代码练习的 reference 经真实文件探针（~/workspace/la-briefs/probe_checks.py，注意需要 `if __name__ == "__main__"` 守卫否则 spawn 递归）逐一 check_code 通过。第 4 轮还须补：书面题/quiz 答案复核、推导完整性全仓扫描、公式手册一致性、AppTest 全页遍历、review-agent 全仓审查。第 4 轮审读中曾探到 `np.load(..., allow_pickle=True)` 未被 banned 命中（探针输出为空命中清单），续做时评估是否构成绕过面并处理。
-2. 第 5 轮（充实检查）：任务书待写，要点已记在本文件未完成项第 4 条；另加明确目标——第 1~3 章 theory 现为 3,885/3,222/3,806 字符，明显薄于第 8~10 章的 8,838/7,649/8,955，充实轮优先把第 1~3 章补到同等密度（增推导与手算算例，不灌水）。
-3. 最终验收（本文件未完成项第 5 条）与部署尝试（第 6 条；Streamlit Cloud 需用户 GitHub OAuth 登录，大概率卡住，如实记录即可）。
-4. 两轮打磨+最终验收全过后，把本文件状态改为 COMPLETE、删去本 QUOTA 段落或注明恢复时间，commit+push。
+历史额度卡点：北京时间 2026-10-25 01:44 至 05:03 多次 `usage limit`，这些失败调用未产生文件改动；本次已恢复并执行第 4 轮，不再停留在旧的重试起点。
 
 状态：**IN_PROGRESS**（未标 COMPLETE 前不许对外宣称建成）
 
@@ -64,10 +48,25 @@
   - 未 git commit/push。整体仍为 **IN_PROGRESS**；本轮审查不替代后续全仓独立审读轮、充实检查轮与人工最终验收。
   - 本轮 tokens：本会话执行尚未结束，无法在结束前读取外层 `codex exec` 的最终 `tokens used`；由调用方在结束后补记，不扫日志估算。
 
+- [x] 第 4 轮（Codex 审修，独立 review-agent 全仓审查）：
+  - 范围：先读未完成项第 3 条；盘点系统 skills；主代理与只读 review-agent 均按全仓范围审读，不限最近 diff。完整清单见 `docs/round4-audit.md`。
+  - 数学复核：临时脚本 `scratch/audit_math_round4.py` 放在 tests 外，仅用标准库、无 numpy/sympy、不执行 reference。60 道书面题全部覆盖（52 项计算/残差证书，8 项纯证明逐步审读），50 道 quiz 按题面独立解后逐题对照选项/answer/explain；另复核14道诊断。全部通过，未发现题目数值答案错误。
+  - 推导逐章：第1章已补推导1.5（基扩充、和/交维数公式及下界，补齐第5章/第9章证明依赖）；第2、3、6、7、8、10章核心推导合格；第4章核心链合格且修正几何体积条件；第5、9章核心链合格，前置缺口已由1.5补齐。全章正文 grep 无跳步禁词；人工未见同义反复冒充证明。
+  - 公式手册：65条逐条核对，报告列完整对应表。修第4章体积公式的有限体积/奇异无限域边界；明确第8章正规矩阵公式存在酉U与复对角Λ，Λ不要求实，其余一致。
+  - 确认 **8项问题、修复8项**：①P1共享np.allclose可被篡改使全零答案通过；②np.inner直接替代手写乘法；③早期章matrix.I隐式求逆；④浮点下标数组误通过；⑤quiz同时显示5题违背一次一题；⑥体积式0·∞条件缺口；⑦基扩充/交维数引用未补完整证明；⑧正规矩阵公式Λ的复谱范围未明确。另 **1项策略加固**：共用禁止np.load(allow_pickle=True)、文件缓存读写及format/npyio/fromregex/DataSource等公开替代入口。
+  - 检查器：11道练习各8种作弊，共88种，全部被拦且中文反馈可读；另回归6种乘法内核、8种库篡改和5种文件替代入口。11道合法等价改写全部真实check_code通过（full替zeros、可交换消元行序、乘法k/j/i循环、hstack增广、合法numpy别名），另验证from numpy import hstack。没有把改变输出排序的实现视为等价。
+  - 页面：AppTest全18页；公式65条/筛选；诊断未答/14题提交/跨页；全部50题一次一题切换提交；错题本自动/手动加入→在本页重练→移除清空；闪卡翻面/掌握；每日一题固定相邻两天并回切；8个已有viz改控件及图像变化（第1、3章无图）；十章进度跨页和新会话从磁盘恢复。未留页面异常，真人浏览器验收仍待最终轮。
+  - 最终主代理全量：`MPLCONFIGDIR=/tmp/linalg-round4-mpl .venv/bin/python -m pytest -q`：**428 passed in 156.86s**（原293＋本轮135），`git diff --check`通过。
+  - 独立 review-agent：初审给出可复现问题，修复后重新通读全仓及新增文件；最终结论 **No findings**；独立数学脚本通过；非页面379＋13＋20＝412项，页面 **16 passed, 412 deselected in 104.38s**，独立分批完整覆盖全部 **428项通过**。
+  - skills逐项：实际调用 `review-agent`（读SKILL并启动独立只读代理，审全仓及最终修复）；`imagegen`未用（不做位图）；`openai-docs`未用（无OpenAI产品问题）；`skill-creator`未用（不创建skill）；`skill-installer`未用（本机已有审查skill）。另按环境要求读取`cloud-environment-runtime`，没有environment_status工具，无网络/容器/凭证操作。完整说明见报告。
+  - 作者：Codex（数学验算/修复/回归/记录），review-agent（独立只读审查）；Muse 验收已完成（见验收注）。整体 **IN_PROGRESS**，第5轮与最终验收保持未完成。
+  - tokens：本次外层 `codex exec` 结束行 `tokens used` = **212,402**。
+  - 验收注（Muse，2026-10-25 晨）：独立复跑全量 pytest **428 passed in 145.62s**；亲跑审读脚本 `scratch/audit_math_round4.py`，PASS（书面 60 = 52 计算 + 8 证明复核、quiz 50、诊断 14）；全仓 grep 跳步禁词零命中；通读第 1 章新增推导 1.5（基扩充与和/交维数公式）判定正确完整；亲手探针：别名导入/`np.matrix.I`/`np.load(allow_pickle=True)`/篡改 `np.allclose` 均被拦截，`np.inner` 在第 2 章矩阵乘法练习中被禁，11 道代码练习参考解经带守卫探针全部 check_code 通过；Streamlit 本地启动返回 HTTP 200（页面渲染另由套件内 AppTest 用例覆盖）。第 4 轮验收通过，仍保持 IN_PROGRESS（第 5 轮与最终验收未做）。
+
 ## 未完成（按顺序续做）
 1. [x] 第 2 轮：第 4–7 章完整内容（规格同第 1–3 章；核心推导指定见各轮任务书要点——第4章行列式：按置换定义→交错多线性→det(AB)=detA·detB 推导链、几何面积意义+viz det_area；第5章特征值：特征多项式、代数/几何重数、Cayley–Hamilton 证明要点完整版、viz eigen_demo；第6章内积与 Gram-Schmidt：Cauchy–Schwarz 由判别式完整推导、GS 正交化构造与 QR、viz gram_schmidt 分步；第7章对角化与矩阵指数：对角化判据推导（特征向量张满）、e^A 定义与微分方程组解、Jordan 形失效情形、viz matrix_power）。每章书面 6（2/2/2 分层）、测验 5、代码练习 ≥1（从零实现、banned 清单齐全）。
 2. [x] 第 3 轮：第 8–10 章（第8章厄米/酉/谱定理为重点章：谱定理对厄米矩阵的完整归纳证明、酉对角化、QM 连接写到可观测量/测量概率层面要具体；第9章 SVD：由 A^TA 谱分解构造 SVD 的完整推导、与特征分解的差别来自哪一步、最小二乘正规方程推导、viz svd_ellipse；第10章张量积：由双线性/多重线性构造、纠缠态不可分解的证明、viz tensor_dims、部分迹初步）+ 公式手册第 4–10 章校对补全 + 闪卡扩充至覆盖全部章节（≥70 张）+ 诊断题与新章节映射复核。
-3. [ ] 第 4 轮（打磨轮①独立审读）：review-agent 全仓审查 + 验收方逐章各抽 1 个核心推导通读、各章抽 1 道书面题解答验算、亲手构造作弊代码（别名/间接调用等）验证 checks 拦截；问题修完并复跑全量 pytest。
+3. [x] 第 4 轮（打磨轮①独立审读）：review-agent 全仓审查 + 验收方逐章各抽 1 个核心推导通读、各章抽 1 道书面题解答验算、亲手构造作弊代码（别名/间接调用等）验证 checks 拦截；问题修完并复跑全量 pytest。
 4. [ ] 第 5 轮（打磨轮②充实检查）：逐章核推导密度（核心结论无只有结论的条目）、每章至少 1 个手算算例、QM 连接具体化（点名具体物理对象/公式，不许口号）；缺失补齐后复跑 pytest。
 5. [ ] 最终验收（验收方亲自）：本地 `streamlit run app.py` 实际打开逐页确认渲染与滑杆交互；错题本加入/重练/清除实测；亲手验算 ≥3 道代码练习参考解数值、≥5 道书面题解答；全绿后本文件标 COMPLETE 并 commit+push。
 6. [ ] 部署尝试：按 neural-network-learning-lab 路径试部署 Streamlit Cloud；需用户登录授权则如实记录卡点（本地+GitHub 交付为准），不要冒充上线。
@@ -80,3 +79,6 @@
   - 验收（Muse）：全量 pytest 独立复跑 **182 passed**；grep 第 4–7 章无跳步词；通读第 6 章 Cauchy–Schwarz 推导（判别式法 + 复情形相位旋转处理 + 等号条件）判定正确完整。
 - 第 3 轮：`codex exec` 结束行 "tokens used" = **133,624**（同口径）。
   - 验收（Muse）：全量 pytest 独立复跑 **293 passed**；grep 第 8–10 章无跳步词；通读第 8 章推导 8.1/8.2 与第 10 章 Schmidt/部分迹/纯度判据段（含判据对联合混合态失效的断点指认）判定合格；亲手 numpy 复算三处数字全对——√3/2,1/2 例 ρ_A=diag(3/4,1/4)、纯度 5/8；Bell 态 ρ_A=I/2、纯度 1/2；σ_x 对 |+z⟩ 测 +1 概率 1/2。
+
+- 第 4 轮：`codex exec` 结束行 `tokens used` = **212,402**（同口径）。
+  - 验收（Muse）：全量 pytest 独立复跑 **428 passed**；审读脚本独立复跑 PASS（书面 60、quiz 50、诊断 14）；作弊探针与 11 道参考解复核全过；Streamlit 本地启动 HTTP 200。

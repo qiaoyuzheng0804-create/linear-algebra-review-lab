@@ -168,9 +168,13 @@ def render_chapter(chapter, data):
             st.subheader(f"{item['level']} · {item['id']}")
             render_written(item, chapter, data, "chapter")
     with quiz_tab:
-        for i, question in enumerate(chapter["quiz"], 1):
-            st.subheader(f"第 {i} 题")
-            render_quiz(question, chapter, data, "chapter")
+        questions = chapter["quiz"]
+        question_id = st.selectbox("选择测验题", [q["id"] for q in questions],
+                                   format_func=lambda qid: f"第 {next(i for i, q in enumerate(questions, 1) if q['id'] == qid)} 题",
+                                   key=f"quiz-select-{cid}")
+        question = next(q for q in questions if q["id"] == question_id)
+        st.subheader(f"第 {questions.index(question) + 1} 题")
+        render_quiz(question, chapter, data, "chapter")
     # 填充顶部占位，在本轮交互更新数据后计算，避免进度滞后一轮。
     completion_slot.progress(progress.completion(data, chapter), text="本章完成度：理论、代码、测验与书面题按项目计数")
 

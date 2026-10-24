@@ -35,7 +35,7 @@ FORMULA_SHEET = {
         (r"A\text{可逆}\iff\det A\ne0", "方阵；伴随恒等式与乘法公式，推导 4.4"),
         (r"x_j=\frac{\det A_j(b)}{\det A}", "Ax=b，det A 非零；A_j(b) 将第 j 列替换为 b，式 (4.5)"),
         (r"A\operatorname{adj}A=\operatorname{adj}A\,A=(\det A)I", "任意有限方阵，包括奇异矩阵；第4章余子式展开推导"),
-        (r"\mathrm{Vol}(A\Omega)=|\det A|\,\mathrm{Vol}(\Omega)", "实方阵作用于可测区域，使用普通体积；第4章几何直觉"),
+        (r"\mathrm{Vol}(A\Omega)=|\det A|\,\mathrm{Vol}(\Omega)", "实方阵、有限体积可测区域，使用普通体积；A 可逆时也允许无限体积；奇异 A 与无限体积不可写 0·∞，见第4章几何直觉"),
     ],
     "第5章": [
         (r"Av=\lambda v\ (v\ne0)\iff (A-\lambda I)v=0", "有限维方阵；λ 在所选数域中，v 非零；推导 5.1"),
@@ -64,7 +64,7 @@ FORMULA_SHEET = {
     ],
     "第8章": [
         (r"H=H^\dagger\Longrightarrow H=U\Lambda U^\dagger,\quad\Lambda\text{为实对角阵}", "有限维厄米矩阵，U 酉；谱定理"),
-        (r"A^\dagger A=AA^\dagger\iff A=U\Lambda U^\dagger", "复方阵；正规矩阵的酉对角化判据"),
+        (r"A^\dagger A=AA^\dagger\iff A=U\Lambda U^\dagger", "复方阵；存在酉 U 与复对角 Λ，Λ 不要求为实；推导 8.5 的正规矩阵酉对角化判据"),
         (r"U^\dagger U=I\Longrightarrow\|U\psi\|=\|\psi\|", "有限维酉方阵，标准复内积"),
         (r"H=\sum_\lambda\lambda P_\lambda,\quad P_\lambda P_\mu=\delta_{\lambda\mu}P_\lambda", "有限维厄米矩阵，P_λ 为整个本征空间的正交投影"),
         (r"Hv=\lambda v\Longrightarrow\lambda\in\mathbb R,\quad Hx=\lambda x,\ Hy=\mu y,\ \lambda\ne\mu\Longrightarrow x^\dagger y=0", "H 厄米，本征向量非零；推导 8.1、8.2；实谱不意味着正谱"),

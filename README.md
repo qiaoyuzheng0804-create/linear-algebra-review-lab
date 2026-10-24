@@ -4,6 +4,6 @@
 
 使用 Python 3.10 或更新版本，在仓库目录运行 `python -m pip install -r requirements.txt`，然后执行 `streamlit run app.py`。运行测试另安装 `pytest`，执行 `python -m pytest -q`。代码编辑器仅用于本机可信学习代码；AST 检查和进程超时不构成恶意代码安全沙箱，不应直接开放给不可信用户。
 
-`app.py` 为统一入口；`linalg_lab/content/` 存放地基及章节数据，`progress.py` 管理本地进度，`checks.py` 检查手写代码，`viz.py` 返回 Matplotlib 图形，`extras.py` 提供公式、诊断、闪卡与依赖图；`tests/` 保存验收测试。`data/progress.json` 在首次记录学习行为时创建，整个 `data/` 目录不纳入 Git。新章按 CHAPTER 字典协议注册即可复用页面，目前第1～10章均已开放，闪卡81张；全仓审读、充实检查与最终验收仍按 BUILD_STATUS.md 继续。
+`app.py` 为统一入口；`linalg_lab/content/` 存放地基及章节数据，`progress.py` 管理本地进度，`checks.py` 检查手写代码，`viz.py` 返回 Matplotlib 图形，`extras.py` 提供公式、诊断、闪卡与依赖图；`tests/` 保存验收测试。`data/progress.json` 在首次记录学习行为时创建，整个 `data/` 目录不纳入 Git。新章按 CHAPTER 字典协议注册即可复用页面，目前第1～10章均已开放，闪卡81张；第4轮全仓审读与修复已记录于 [审读报告](docs/round4-audit.md)，第5轮充实检查与最终验收仍按 BUILD_STATUS.md 继续。
 
 先做入学诊断，补齐地基，再按章阅读并复述推导、手写代码、查看逐例反馈。随后完成每章两道基础、两道进阶、两道考试风格书面题及五道测验，用错题本、闪卡和每日一题巩固；各章完成度按理论、代码题、测验题和书面题的项目数计。进度面向单人本地使用，测验记录当前答对的题目数，代码记录曾经通过的练习 ID。书面题需自行完成后标记；诊断题与闪卡不重复计入章节完成度。

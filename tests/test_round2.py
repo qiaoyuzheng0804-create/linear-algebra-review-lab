@@ -305,7 +305,7 @@ def test_new_chapter_page_interaction(number, tmp_path, monkeypatch):
     assert any("## 核心推导" in m.value for m in app.markdown)
     assert not any(m.value == "建设中" for m in app.info)
     assert len(app.text_area) == len(CHAPTERS[number]["code_exercises"])
-    assert len(app.radio) == 6  # 导航一项及五道测验
+    assert len(app.radio) == 2  # 导航及当前一题；题号由选择框切换
     assert len(app.get("image")) == 1
     if number in (4, 5):
         key = CHAPTERS[number]["viz"][0]

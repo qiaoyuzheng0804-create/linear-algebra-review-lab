@@ -307,7 +307,7 @@ def test_round3_chapter_page_interaction(number, tmp_path, monkeypatch):
     app.sidebar.radio[0].set_value(f"第{number}章").run(timeout=20)
     assert not app.exception
     assert app.title[0].value == f"第{number}章　{CHAPTER_TITLES[number]}"
-    assert len(app.get("image")) == 1 and len(app.text_area) == 1 and len(app.radio) == 6
+    assert len(app.get("image")) == 1 and len(app.text_area) == 1 and len(app.radio) == 2
     assert any("## 核心推导" in x.value for x in app.markdown)
     if number == 8:
         app.slider(key="ch8-hermitian-b").set_value(1.2).run()

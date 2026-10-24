@@ -3,8 +3,45 @@ from __future__ import annotations
 
 import ast
 import multiprocessing as mp
+from types import ModuleType
 
 import numpy as np
+
+
+# 这些入口可在不出现 linalg 调用的情况下求逆，或从文件恢复任意对象。
+# 所有章节共用，避免早期章节漏配后形成不同的检查标准。
+COMMON_BANNED = {
+    "np.matrix", "np.asmatrix", "np.mat", "np.bmat", "np.matrixlib", "np.matlib",
+    "np.load", "np.loadtxt", "np.genfromtxt", "np.fromfile", "np.memmap",
+    "np.save", "np.savez", "np.savez_compressed", "np.savetxt", "np.ctypeslib",
+    "np.fromregex", "np.DataSource", "np.lib.format", "np.lib.npyio",
+}
+
+
+class _NumpyView:
+    """学生可读取 NumPy API，但不能改写验证器共用的模块属性。"""
+
+    __slots__ = ("_module",)
+
+    def __init__(self, module):
+        object.__setattr__(self, "_module", module)
+
+    def __getattribute__(self, name):
+        if name.startswith("_"):
+            raise AttributeError("不允许访问 NumPy 内部属性")
+        return object.__getattribute__(self, name)
+
+    def __getattr__(self, name):
+        if name.startswith("_"):
+            raise AttributeError("不允许访问 NumPy 内部属性")
+        value = getattr(object.__getattribute__(self, "_module"), name)
+        return _NumpyView(value) if isinstance(value, ModuleType) else value
+
+    def __setattr__(self, name, value):
+        raise TypeError(f"不允许修改 NumPy 库属性：{name}")
+
+    def __delattr__(self, name):
+        raise TypeError(f"不允许删除 NumPy 库属性：{name}")
 
 
 def _canonical(name):
@@ -13,7 +50,7 @@ def _canonical(name):
 
 def banned_hits(source, banned):
     tree = ast.parse(source)
-    blocked = {_canonical(x) for x in banned}
+    blocked = {_canonical(x) for x in banned} | COMMON_BANNED
     # NumPy 可能在其他模块重导出 linalg 的函数。禁用整个 linalg 时，
     # 同时保留其公开 API 名，与下面的属性/导入符号检查使用同一策略。
     if "np.linalg" in blocked:
@@ -94,6 +131,9 @@ def banned_hits(source, banned):
                 hits.update(name for name in resolve(node) if forbidden(name))
             if isinstance(node, ast.Attribute) and node.attr.startswith("__"):
                 hits.add(f"不允许访问内部属性：{node.attr}")
+            if isinstance(node, ast.Attribute) and isinstance(node.ctx, (ast.Store, ast.Del)):
+                if any(path == "np" or path.startswith("np.") for path in resolve(node.value)):
+                    hits.add(f"不允许修改 NumPy 库属性：{node.attr}")
             if isinstance(node, ast.Name) and node.id in {"eval", "exec", "compile", "__import__", "getattr", "setattr", "globals", "locals", "open"}:
                 hits.add(f"不允许动态执行或访问：{node.id}")
             if isinstance(node, scope_types):
@@ -110,6 +150,9 @@ def _same(actual, expected):
         return actual is None
     try:
         a, b = np.asarray(actual), np.asarray(expected)
+        # 下标数组必须仍可用于数组索引，数值相同的浮点数组不满足契约。
+        if isinstance(expected, np.ndarray) and b.dtype.kind in "iu" and a.dtype.kind not in "iu":
+            return False
         return a.shape == b.shape and bool(np.allclose(a, b, rtol=1e-7, atol=1e-8))
     except (TypeError, ValueError):
         return False
@@ -118,7 +161,7 @@ def _same(actual, expected):
 def _numpy_import(name, globals=None, locals=None, fromlist=(), level=0):
     if level or not (name == "numpy" or name.startswith("numpy.")):
         raise ImportError("仅允许导入 numpy")
-    return __import__(name, globals, locals, fromlist, level)
+    return _NumpyView(__import__(name, globals, locals, fromlist, level))
 
 
 def _worker(connection, source, exercise, seed):
@@ -139,7 +182,7 @@ def _worker(connection, source, exercise, seed):
             "reversed", "round", "set", "slice", "sorted", "sum", "tuple", "ValueError", "zip"
         )}
         allowed["__import__"] = _numpy_import
-        namespace = {"np": np, "__builtins__": allowed}
+        namespace = {"np": _NumpyView(np), "__builtins__": allowed}
         exec(compile(source, "<学生代码>", "exec"), namespace)
         function = namespace.get(exercise["function_name"])
         if not callable(function):
