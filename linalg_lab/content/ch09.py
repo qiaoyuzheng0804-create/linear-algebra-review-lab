@@ -149,6 +149,34 @@ $\sigma_i^{-2}\sigma_i=\sigma_i^{-1}$，所以
 $$ x_+=(A^\dagger A)^{-1}A^\dagger b.\tag{9.6} $$
 这是列满秩时的唯一系数解；亏秩时式 (9.5) 仍成立，式 (9.6) 的求逆步骤失效。
 
+### 推导 9.5：伪逆的四恒等式为何唯一确定同一个矩阵
+
+动机：最小范数给出了 $A^+b$，还要核对该矩阵与不依赖 b 的 Moore–Penrose 定义相同。
+由 $A=U\Sigma V^\dagger$、$A^+=V\Sigma^+U^\dagger$，直接消去中间酉因子得
+$AA^+=U(\Sigma\Sigma^+)U^\dagger$ 与 $A^+A=V(\Sigma^+\Sigma)V^\dagger$。
+括号内都是前 r 个对角元为 1、其余为零的矩形两端方阵，因而自伴且幂等。
+再逐个对角元算 $\sigma_i(1/\sigma_i)\sigma_i=\sigma_i$ 和
+$(1/\sigma_i)\sigma_i(1/\sigma_i)=1/\sigma_i$；零值位置三项乘积也为零，所以
+$$ AA^+A=A,\quad A^+AA^+=A^+,\quad
+(AA^+)^\dagger=AA^+,\quad(A^+A)^\dagger=A^+A. $$
+这同时证明两个乘积确是像空间和核正交补上的正交投影。
+
+为证明唯一性，设 X 为任意满足同四式的 n×m 矩阵，令 $Y=V^\dagger XU$，
+把输入与输出都按正奇异方向 r 和其余方向分块。写
+$\Sigma=\begin{pmatrix}D&0\\0&0\end{pmatrix}$，
+$Y=\begin{pmatrix}Y_{11}&Y_{12}\\Y_{21}&Y_{22}\end{pmatrix}$，
+其中 $D=\operatorname{diag}(\sigma_1,\ldots,\sigma_r)$ 可逆。
+$AXA=A$ 化为 $DY_{11}D=D$，左右乘 $D^{-1}$ 给 $Y_{11}=D^{-1}$。
+$AX$ 自伴化为 $\Sigma Y$ 自伴，其右上块 $DY_{12}$ 必为左下零块的伴随，
+故 $Y_{12}=0$。$XA$ 自伴同理使 $Y_{21}D=0$，故 $Y_{21}=0$。
+最后 $XAX=X$ 化为 $Y\Sigma Y=Y$，左边右下块为零，给 $Y_{22}=0$。
+于是 $Y=\Sigma^+$，换回去 $X=V\Sigma^+U^\dagger=A^+$，唯一性证明结束。
+r=0 时 A=0，直接由 $XAX=X$ 得 X=0，也与定义一致；满行或满列时空块不添加条件。
+
+条件与失效：四式须同时满足；只要求 $AXA=A$ 不能固定核与残差方向上的作用。
+例如 $A=\operatorname{diag}(1,0)$ 时，任意 $X=\operatorname{diag}(1,c)$ 都满足第一式，
+第二式却要求 $c=0$，因此“广义逆”这一较弱条件不等于这里唯一的伪逆。
+
 **完整手算算例。** 取 $A=\begin{pmatrix}1&1\\1&-1\\0&0\end{pmatrix}$，$b=(2,0,3)^T$。
 $A^TA=\begin{pmatrix}2&0\\0&2\end{pmatrix}$，故 $V=I_2$，$\sigma_1=\sigma_2=\sqrt2$。
 $u_1=(1,1,0)^T/\sqrt2$、$u_2=(1,-1,0)^T/\sqrt2$，再补 $u_3=(0,0,1)^T$。

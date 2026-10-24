@@ -227,8 +227,18 @@ Bell 态满足 $(\sigma_z\otimes\sigma_z)|\Phi^+\rangle=|\Phi^+\rangle$，
 对 00 作用得到 11，与 00 内积为零；对 11 作用得到 00，与 11 内积为零，再取平均仍为零。
 这给出只测局域态不能看到、联合测量可以区分的具体相干信息。
 局域酉变换把振幅矩阵变成 $C'=LCR^T$，
-因为输出系数为 $\sum_{ij}L_{ki}C_{ij}R_{lj}$；$R^T$ 也是酉阵，
-所以由 SVD 的酉不变性，Schmidt 系数不变，局域换基不能消除纠缠纯态的非零 Schmidt 分量。
+因为输出系数为 $\sum_{ij}L_{ki}C_{ij}R_{lj}$；由 $R^\dagger R=RR^\dagger=I$ 取共轭，
+得到 $R^T\bar R=\bar R R^T=I$，故 $R^T$ 也是酉阵。
+因此
+$$ C'C'^\dagger=LCR^T\bar R C^\dagger L^\dagger=L(CC^\dagger)L^\dagger. $$
+若 $CC^\dagger u=s^2u$，左乘 L 给
+$C'C'^\dagger(Lu)=s^2(Lu)$，且 L 可逆，所以两边的本征空间一一对应，重数保持。
+奇异值是这些非负本征值的平方根，故 Schmidt 系数保持，局域变换不能消除非零 Schmidt 分量。
+本章含相位例中取 $L=I,R=\operatorname{diag}(1,-i)$，则
+$C=\operatorname{diag}(\sqrt3/2,i/2)$ 变成
+$C'=CR^T=\operatorname{diag}(\sqrt3/2,1/2)$；
+相位 i 被局域操作消去，但 $CC^\dagger=C'C'^\dagger=\operatorname{diag}(3/4,1/4)$，
+Schmidt 秩仍为 2、纯度仍为 5/8，直接检验了不变量与纠缠判定。
 """
 
 REFERENCE = '''def tensor_tools(A, B, rho, dims, keep):

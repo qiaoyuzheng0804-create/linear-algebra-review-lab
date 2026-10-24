@@ -152,8 +152,38 @@ $\sigma_z=\operatorname{diag}(1,-1)$，能量为 $\pm\hbar\omega/2$，本征态�
 若 $[H,S]=0$ 且 $H\psi=E\psi$，则 $H(S\psi)=S(H\psi)=E(S\psi)$，
 所以对称操作 $S$ 把能量 $E$ 的本征空间映回自身；若产生与 $\psi$ 无关的态，便出现简并。
 对易本身不强迫简并，例如 $S=I$ 也与任何 $H$ 对易。
-一阶简并微扰应在该本征空间中对角化 $W_{ab}=\langle a|V|b\rangle$，
-其特征值是能量一阶修正，其特征向量给出正确的零阶态组合。
+简并微扰中的小矩阵也来自本征方程。设
+$H(\epsilon)=H_0+\epsilon V$，$H_0,V$ 厄米，$E_0$ 是孤立的简并能级，
+其本征空间有正交归一基 $|a\rangle$。取某条可微本征分支
+$E(\epsilon)=E_0+\epsilon E^{(1)}+o(\epsilon)$，
+$|\psi(\epsilon)\rangle=|\psi^{(0)}\rangle+\epsilon|\psi^{(1)}\rangle+o(\epsilon)$，
+其中 $|\psi^{(0)}\rangle=\sum_b c_b|b\rangle$。
+把两展开代回 $H(\epsilon)\psi(\epsilon)=E(\epsilon)\psi(\epsilon)$，
+常数阶是已知方程，逐项比较一次阶得
+$$ (H_0-E_0I)|\psi^{(1)}\rangle+V|\psi^{(0)}\rangle
+=E^{(1)}|\psi^{(0)}\rangle. $$
+左乘 $\langle a|$，由厄米性和 $H_0|a\rangle=E_0|a\rangle$ 得
+$\langle a|(H_0-E_0I)=0$，所以未知的一阶态修正消去。
+将零阶态展开代入后，剩下
+$$ \sum_b\underbrace{\langle a|V|b\rangle}_{W_{ab}}c_b=E^{(1)}c_a. $$
+这就是 $Wc=E^{(1)}c$ 的来源：W 的本征值给一阶能量修正，
+其本征向量才给应选择的零阶组合，不能在简并空间中先任意固定一个基态就各算对角元。
+$\overline{W_{ba}}=\langle a|V^\dagger|b\rangle=W_{ab}$，故 W 也是厄米矩阵。
+
+具体取 $H_0=\operatorname{diag}(2,2,5)$、
+$V=\begin{pmatrix}1&2&0\\2&1&0\\0&0&0\end{pmatrix}$，在 $E_0=2$ 空间中
+$W=\begin{pmatrix}1&2\\2&1\end{pmatrix}$。
+$\det(\mu I-W)=(\mu-1)^2-4=(\mu-3)(\mu+1)$，修正为 3、-1。
+对 3，方程 $-2c_1+2c_2=0$ 给单位组合 $(1,1)^T/\sqrt2$；
+对 -1，$2c_1+2c_2=0$ 给 $(1,-1)^T/\sqrt2$。
+代回完整三阶矩阵直接核对
+$H(\epsilon)(1,\pm1,0)^T/\sqrt2=(2+\epsilon\pm2\epsilon)(1,\pm1,0)^T/\sqrt2$，
+所以本例两能量恰为 $2+3\epsilon$、$2-\epsilon$。
+它们在 $\epsilon=0$ 合并为同一能级，非零小 $\epsilon$ 时分裂；两对角元同为 1 并没有给出分裂后的修正。
+
+条件与失效：上述比较针对 $\epsilon=0$ 附近的可微本征分支与一阶系数；一般模型被略去的余项不能视为零。
+本数字例中 V 不耦合第三能级，才使小矩阵答案同时成为精确答案。
+若 W 本身仍简并，一阶方程不能选择其简并空间内的唯一组合，需要继续检查更高阶方程。
 """
 
 REFERENCE = '''def power_iteration(A, x0, steps):
@@ -226,7 +256,7 @@ WRITTEN = [
 1. 依据特征多项式定义，$p_W(z)=z^2-\delta^2$，根为 $\delta,-\delta$。
 2. 依据 $(W-\delta I)c=0$，有 $c_1=c_2$；由归一化 $|c_1|^2+|c_2|^2=1$，可取 $(1,1)^T/\sqrt2$。
 3. 依据 $(W+\delta I)c=0$，有 $c_1=-c_2$，同样可取 $(1,-1)^T/\sqrt2$。
-4. 依据简并微扰的子空间本征问题，若 $H=H_0+\epsilon V$，这两个组合的能量为 $E_0\pm\epsilon\delta+O(\epsilon^2)$，简并在一阶分裂。
+4. 依据简并微扰的子空间本征问题，若 $H=H_0+\epsilon V$，这两个组合的能量为 $E_0\pm\epsilon\delta+o(\epsilon)$，简并在一阶分裂。
 """, "pitfalls_md": "简并情况下不能只读取原基中的对角矩阵元 0；必须先在简并子空间对角化 W。"},
 ]
 QUIZ = [

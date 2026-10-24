@@ -216,6 +216,18 @@ $$ p_x^+=\frac{3+1+2\sqrt3}{8}=\frac{2+\sqrt3}{4}\approx0.933013,
 $\langle\sigma_x\rangle=p_x^+-p_x^-=\sqrt3/2$。
 物理自旋算符是 $S_z=\hbar\sigma_z/2,S_x=\hbar\sigma_x/2$，读数改为 $\pm\hbar/2$，概率不变。
 
+**简并投影的数字核对。** 取 $H=\operatorname{diag}(2,2,5)$、
+$\psi=(1,2,i)^T/\sqrt6$，读数 2 的整个本征空间是 $\operatorname{span}(e_1,e_2)$。
+$P_2=\operatorname{diag}(1,1,0)$ 给 $p(2)=(1+4)/6=5/6$，
+$P_5=\operatorname{diag}(0,0,1)$ 给 $p(5)=1/6$。
+测到 2 后的态为 $(1,2,0)^T/\sqrt5$，其范数平方为 1。
+若在简并空间改用 $q_\pm=(e_1\pm e_2)/\sqrt2$，
+两投影矩阵分别是左上块 $\frac12\begin{pmatrix}1&\pm1\\\pm1&1\end{pmatrix}$，
+求和仍为 $P_2$；两方向振幅为 $3/\sqrt{12},-1/\sqrt{12}$，
+模平方相加 $9/12+1/12=5/6$，因此内部旋转不改变该能量读数的概率。
+期望值也可两路核对：$2(5/6)+5(1/6)=5/2$，
+直接算 $\psi^\dagger H\psi=(2+8+5)/6=5/2$。
+
 对时间无关厄米 Hamilton H，由谱分解定义
 $U(t)=\sum_\lambda e^{-i\lambda t/\hbar}P_\lambda$。
 实 t、实非零 $\hbar$ 时相位模为 1，逐项乘积并用投影正交性得

@@ -38,7 +38,7 @@ $(J-\lambda I)v=0$ 给 $v_2=0$，所有特征向量只张成一条直线。
 可以写两列相同方向的 $P$ 使形式上的 $JP=P\Lambda$ 成立，但 $P$ 不可逆，
 证明中左乘 $P^{-1}$ 的那一步无法执行。这是缺陷矩阵的具体障碍。
 Jordan 形式用广义特征向量补齐：$Ne_1=0,Ne_2=e_1$；第二个基向量的像含第一个方向，
-所以留下超对角线的 $1$，不能变成对角阵。一般复方阵可分成这种 Jordan 块；本章用该二阶块说明失效机制。
+所以留下超对角线的 $1$，不能变成对角阵。此处的二阶链已直接算出，足以说明本章对角化路径失效的机制。
 
 条件与失效：在实数域可对角化要求实特征向量张满；平面旋转可在复数域对角化，却不能在实数域对角化。
 重根本身不是障碍，缺少独立本征方向才是；例如 $\lambda I$ 的整个空间都是本征空间。
@@ -157,7 +157,16 @@ Heisenberg 绘景把演化移到可观测量：$O_H(t)=U^\dagger O_S U$。
 当 $O_S$ 无显式时间依赖，乘积求导给
 $\dot O_H=(i/\hbar)U^\dagger(HO_S-O_SH)U=(i/\hbar)[H,O_H]$，
 最后一步用了 H 与 U 交换。例如 $H=\hbar\omega\sigma_z/2$ 与 $O_S=\sigma_x$ 不对易，
-所以自旋横向分量随时间演化；若 $[H,O_S]=0$ 则该量守恒。
+所以自旋横向分量随时间演化；可逐项算出其演化：令 $\theta=\omega t$，
+$U=\operatorname{diag}(e^{-i\theta/2},e^{i\theta/2})$，
+$$ U^\dagger\sigma_xU=\begin{pmatrix}0&e^{i\theta}\\e^{-i\theta}&0\end{pmatrix}
+=\cos\theta\,\sigma_x-\sin\theta\,\sigma_y,\qquad
+\sigma_y=\begin{pmatrix}0&-i\\i&0\end{pmatrix}. $$
+初态 $|+x\rangle=(1,1)^T/\sqrt2$ 有 $\langle\sigma_x(t)\rangle=\cos\theta$，
+因为夹乘上式给 $(e^{i\theta}+e^{-i\theta})/2$。
+相应的 +x 投影为 $(I+\sigma_x)/2$，概率是 $(1+\cos\theta)/2$；
+$\theta=\pi/2$ 时为 1/2，$\theta=\pi$ 时为 0，定态相位的相对变化已经成为具体测量概率。
+若 $[H,O_S]=0$ 则该量守恒。
 """
 
 REFERENCE = '''def spectral_action(A, x, k, t):
