@@ -96,7 +96,7 @@
 3. [x] 第 4 轮（打磨轮①独立审读）：review-agent 全仓审查 + 验收方逐章各抽 1 个核心推导通读、各章抽 1 道书面题解答验算、亲手构造作弊代码（别名/间接调用等）验证 checks 拦截；问题修完并复跑全量 pytest。
 4. [x] 第 5 轮（打磨轮②充实检查）：十章推导/手算/QM检查与补齐、独立review-agent审查修复、全量428项通过，详见本轮条目及docs/round5-audit.md；独立review-agent最终 **No findings**，已复核最终记录。
 5. [x] 最终验收（验收方亲自，2026-10-25 07:02 看护轮 Muse 执行）：本地 `streamlit run app.py`（8509 端口）启动、首页 HTTP 200，AppTest 逐页确认全部 18 页渲染无异常；第 6 章 Gram-Schmidt 滑杆、第 10 章张量维数滑杆交互通过；错题本加入（测验答错自动收录）/移除实测通过；亲手验算 6 道代码练习参考解数值、5 道数值书面题解答全部正确（另通读 ch1-w1 证明）；全量 pytest 428 passed 全绿；本文件标 COMPLETE 并 commit+push。
-6. [ ] 部署尝试（COMPLETE 后待办，不阻塞 COMPLETE）：按 neural-network-learning-lab 路径试部署 Streamlit Cloud；需用户登录授权则如实记录卡点（本地+GitHub 交付为准），不要冒充上线。
+6. [x] 部署（2026-10-25 13:22–13:33，Muse 浏览器执行）：已上线 https://linear-algebra-review-lab.streamlit.app/ 并实际打开确认中文界面渲染（标题「线性代数复习实验室」、18 项导航齐全）。说明：Streamlit 免费版仅许 1 个私有应用（已被 NN 实验室占用），用户拍板选 B——本仓库改为公开后部署为公开应用，NN 实验室未做任何改动；改公开时 GitHub sudo 邮箱验证已完成。
 
 ## 各轮 Codex tokens
 - 第 1 轮：103,276

@@ -2,6 +2,8 @@
 
 面向大三物理本科生的中文 Streamlit 线性代数复习平台，以完整推导、手写算法检查、几何观察与量子力学衔接形成学习闭环；定位依据见 [先行项目与差异化](docs/prior-art.md)。
 
+**在线学习**：https://linear-algebra-review-lab.streamlit.app/ — 点开即学，网页按完整推导 → 手写代码检验 → 自动检查组织，含地基、十章、公式手册、入学诊断、错题本、知识地图、闪卡与每日一题（Streamlit Community Cloud 部署，代码更新到 main 后自动重新部署）。注意：在线版的学习进度保存在云端临时环境，不会回写本仓库，重要进度请同步回本地文件。
+
 使用 Python 3.10 或更新版本，在仓库目录运行 `python -m pip install -r requirements.txt`，然后执行 `streamlit run app.py`。运行测试另安装 `pytest`，执行 `python -m pytest -q`。代码编辑器仅用于本机可信学习代码；AST 检查和进程超时不构成恶意代码安全沙箱，不应直接开放给不可信用户。
 
 `app.py` 为统一入口；`linalg_lab/content/` 存放地基及章节数据，`progress.py` 管理本地进度，`checks.py` 检查手写代码，`viz.py` 返回 Matplotlib 图形，`extras.py` 提供公式、诊断、闪卡与依赖图；`tests/` 保存验收测试。`data/progress.json` 在首次记录学习行为时创建，整个 `data/` 目录不纳入 Git。新章按 CHAPTER 字典协议注册即可复用页面，目前第1～10章均已开放，闪卡81张；第4轮全仓审读与修复已记录于 [审读报告](docs/round4-audit.md)，第5轮充实检查与最终验收仍按 BUILD_STATUS.md 继续。
